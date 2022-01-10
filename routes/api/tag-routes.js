@@ -7,13 +7,12 @@ router.get('/', (req, res) => {
   // find all tags
   // be sure to include its associated Product data
   Tag.findAll({
-    attributes: ['id', 'tag_name'],
-    include: [
+    include: 
       {
         model: Product,
-        attributes: ['product_name'],
-      },
-    ],
+        keys: 'id'
+      
+  }
   })
   .then((cat_id) => res.json(cat_id))
   .catch((err) => {
@@ -27,15 +26,14 @@ router.get('/:id', (req, res) => {
   // be sure to include its associated Product data
   Tag.findOne({
     where: {
-      tag_id: req.params.id,
+      id: req.params.id,
     },
-    attributes: ['product_name'],
-    include: [
+    include: 
       {
         model: Product,
-        attributes: ['product_name']
+        keys: 'id'
       },
-    ],
+   
   })
   .then((cat_id) => res.json(cat_id))
   .catch((err) => {
@@ -58,9 +56,13 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a tag's name by its `id` value
-  Tag.update(req.body, {
-    where: {
-      id: req.params.id,
+  Tag.update(
+    {
+      tag_name: req.body.tag_name
+    },
+    {
+      where: {
+      id: req.params.id
     },
   })
     .then((tagid) => res.json(tagid))
